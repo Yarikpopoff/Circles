@@ -1,0 +1,24 @@
+body {
+	font-family: 'Open Sans', sans-serif;
+}
+
+.field {
+	position: relative;
+	margin-right: 50px;
+	width: 100%;
+	background-color: white;
+}
+
+.test-circle {
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	border: 1px solid black;
+}
+
+.name {
+	position: absolute;
+	padding: 0;
+	margin: 0;
+}

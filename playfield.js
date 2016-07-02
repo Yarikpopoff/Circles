@@ -4,12 +4,18 @@ function Position(name, color, step) {
 	this.left = 0;
 	this.name = name;
 	this.color = color;
-	this.maxTop = $(window).height() - 100;
-	this.maxLeft = $('.field').width() - 100;
+	this.fieldHeight = $(window).height(); 
+	this.fieldWidth = $('.field').width() - 100;
+	this.keyCode = {
+		37: 'ArrowLeft',
+		38: 'ArrowUp',
+		39: 'ArrowRight',
+		40: 'ArrowDown'
+	}
 }
 
 Position.prototype.init = function() {
-	$('.field').css('height', this.maxTop);
+	$('.field').css('height', this.fieldHeight);
 	$('.name').text(this.name);
 	$('.test-circle').css('top',this.top)
 		.css('left', this.left)
@@ -27,9 +33,9 @@ Position.prototype.ArrowUp = function() {
 }
 
 Position.prototype.ArrowDown = function() {
-	if (this.top < this.maxTop) {
+	if (this.top < this.fieldHeight - 40 - this.step - 1) {
 		this.top = this.top + this.step;
-		if (this.top > this.maxTop) this.top = this.maxTop;
+		if (this.top > this.fieldHeight) this.top = this.fieldHeight - 40 - this.step - 1;
 	}
 }
 
@@ -41,22 +47,23 @@ Position.prototype.ArrowLeft = function() {
 }
 
 Position.prototype.ArrowRight = function() {
-	if (this.left < this.maxLeft) {
+	if (this.left < this.fieldWidth) {
 		this.left = this.left + this.step;
-		if (this.left > this.maxLeft) this.left = this.maxLeft;
+		if (this.left > this.fieldWidth) this.left = this.fieldWidth;
 	}
 }
 
-var textCircle = new Position(localStorage.userName, localStorage.userBackgroundColor, 10);
+Position.prototype.Move = function(event) {
+	// debugger;
+	this[this.keyCode[event.which]]();
+	$('.test-circle').css('top', this.top)
+		.css('left', this.left)
+		.css('background-color', this.color);
+	$('.name').css('top', this.top)
+		.css('left', 45 + this.left);
+}
+
+var textCircle = new Position(localStorage.userName, localStorage.userBackgroundColor, 5);
 textCircle.init();
 
-$('body').keydown(circleMove);
-
-function circleMove(event) {
-	textCircle[event.key]();
-	$('.test-circle').css('top', textCircle.top)
-		.css('left', textCircle.left)
-		.css('background-color', textCircle.color);
-	$('.name').css('top', textCircle.top)
-		.css('left', 45 + textCircle.left);
-}
+$('body').keydown(textCircle.Move.bind(textCircle));

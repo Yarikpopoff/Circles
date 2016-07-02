@@ -24,7 +24,7 @@ function inputName(event) {
 	if (userName.length <= 8 && userName.length !== 0) {
 		userNameElem.css('border-color', 'inherit');
 		$('.big-circle').text(userName);
-		$('.submit').attr('href', 'secondpage.html');
+		$('.submit').attr('href', 'secondpage.html'); // разобраться с queryString
 	} else {
 		userNameElem.css('border-color', 'red');
 		$('.submit').attr('href', '#');

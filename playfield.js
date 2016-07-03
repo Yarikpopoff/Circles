@@ -4,7 +4,7 @@ function Position(name, color, step) {
 	this.left = 0;
 	this.name = name;
 	this.color = color;
-	this.fieldHeight = $(window).height(); 
+	this.fieldHeight = $(window).height() - 100; 
 	this.fieldWidth = $('.field').width() - 100;
 	this.keyCode = {
 		37: 'ArrowLeft',

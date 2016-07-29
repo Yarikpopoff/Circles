@@ -1,12 +1,14 @@
 body {
-	font-family: 'Open Sans', sans-serif;
+	font-family: 'Open Sans', sans-serif;	
 }
 
 .field {
 	position: relative;
 	margin-right: 50px;
-	width: 100%;
+	width: 500px;
+	height: 600px;
 	background-color: white;
+	border: 2px solid black;
 }
 
 .test-circle {
@@ -14,10 +16,19 @@ body {
 	width: 40px;
 	height: 40px;
 	border-radius: 50%;
-	border: 1px solid black;
+	border: 2px solid black;
+	z-index: 10;
 }
 
-.name {
+.other-circle {
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	border: 1px solid gray;
+}
+
+.name, .other-name {
 	position: absolute;
 	padding: 0;
 	margin: 0;

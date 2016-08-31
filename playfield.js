@@ -4,11 +4,12 @@ function Position(id, name, color, step) {
 	this.top = 0;
 	this.left = 0;
 	this.name = name;
-	this.varCircle;
-	this.varName;
+	this.varCircle = $('<div class="user-circle"></div>');
+	this.varName = $('<p class="name"></p>');
 	this.color = color;
-	this.fieldHeight = $('.field').height() - 100; 
-	this.fieldWidth = $('.field').width() - 100;
+	this.fieldHeight = $('.field').height(); 
+	this.fieldWidth = $('.field').width() - 44;
+	this.mouseMode = 'Stop';
 	this.keyCode = {
 		37: 'ArrowLeft',
 		38: 'ArrowUp',
@@ -18,17 +19,41 @@ function Position(id, name, color, step) {
 }
 
 Position.prototype.init = function() {
-	this.varCircle = $('<div class="test-circle"></div>');
-	this.varName = $('<p class="name"></p>');
 	$('.field').append(this.varCircle)
 		.append(this.varName);		
-	$('.field').css('height', this.fieldHeight);
 	$('.name').text(this.name);
-	$('.test-circle').css('top',this.top)
+	$('.user-circle').css('top',this.top)
 		.css('left', this.left)
 		.css('background-color',this.color);
 	$('.name').css('top', this.top)
 		.css('left', 45 + this.left);
+
+}
+
+Position.prototype.mouseInit = function() {
+	var _this = this;
+	$('.user-circle')
+		.mousedown(function() {
+			_this.mouseMode = 'Move';
+		});
+	$('body').mousemove(function(event) {
+		event.preventDefault();
+		if (_this.mouseMode == 'Move') {
+			_this.top = event.pageY - 30;
+			if (_this.top < 0) _this.top = 0;
+			if (_this.top > _this.fieldHeight - 44) _this.top = _this.fieldHeight - 44; 
+			_this.left = event.pageX - 30;
+			if (_this.left < 0) _this.left = 0;
+			if (_this.left > _this.fieldWidth) _this.left = _this.fieldWidth;
+			$('.user-circle').css('top', _this.top)
+				.css('left', _this.left);
+			$('.name').css('top', _this.top)
+				.css('left', 45 + _this.left);
+			socket.emit('init', _this);
+		};
+	}).mouseup(function() {
+		_this.mouseMode = 'Stop';
+	});
 }
 
 Position.prototype.ArrowUp = function() {
@@ -39,9 +64,9 @@ Position.prototype.ArrowUp = function() {
 }
 
 Position.prototype.ArrowDown = function() {
-	if (this.top < this.fieldHeight - 40 - this.step - 1) {
+	if (this.top < this.fieldHeight) { 
 		this.top = this.top + this.step;
-		if (this.top > this.fieldHeight) this.top = this.fieldHeight - 40 - this.step - 1;
+		if (this.top > this.fieldHeight - 44) this.top = this.fieldHeight - 44; 
 	}
 }
 
@@ -63,9 +88,8 @@ Position.prototype.Move = function(event) {
 	if (event.which in this.keyCode) {
 		this[this.keyCode[event.which]]();
 	}
-	$('.test-circle').css('top', this.top)
-		.css('left', this.left)
-		.css('background-color', this.color);
+	$('.user-circle').css('top', this.top)
+		.css('left', this.left);
 	$('.name').css('top', this.top)
 		.css('left', 45 + this.left);
 }
@@ -85,11 +109,11 @@ socket.on('init', function(data) {
 		var textCircle = new Position(id, localStorage.userName, localStorage.userBackgroundColor, 5);
 		textCircle.init();
 		socket.emit('init', textCircle);
+		textCircle.mouseInit();
 
-		$('body').keydown(textCircle.Move.bind(textCircle))
-			.keydown(function(event) {
+		$('body').keydown(function (event) {
 			if (event.which in textCircle.keyCode) {
-				// debugger;
+				textCircle.Move(event);
 				socket.emit('init', textCircle);
 			}
 		});
@@ -97,7 +121,6 @@ socket.on('init', function(data) {
 		// setTimeout(function() {textCircle.Remove()}, 5000);
 
 	} else {
-		// console.log(data);
 		$('.other-circle').remove();
 		$('.other-name').remove();
 		data.forEach(function(el) {

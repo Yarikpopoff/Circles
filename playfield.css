@@ -11,7 +11,12 @@ body {
 	border: 2px solid black;
 }
 
-.test-circle {
+.message {
+	width: 500px;
+	text-align: center;
+}
+
+.user-circle {
 	position: absolute;
 	width: 40px;
 	height: 40px;
@@ -28,7 +33,14 @@ body {
 	border: 1px solid gray;
 }
 
-.name, .other-name {
+.name {
+	position: absolute;
+	padding: 0;
+	margin: 0;
+	z-index: 10;
+}
+
+.other-name {
 	position: absolute;
 	padding: 0;
 	margin: 0;

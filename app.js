@@ -1,11 +1,14 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var favicon = require('serve-favicon');
 
 app.set('port', process.env.PORT || 3000);
+app.use(favicon(__dirname + '/favicon.ico'));
 
 server.listen(app.get('port'), function() {
-	console.log("Listening on " + app.get('port'));
+  console.log("Listening on " + app.get('port'));
 });
 
 app.get('/', function (req, res) {

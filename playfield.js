@@ -31,29 +31,28 @@ Position.prototype.init = function() {
 }
 
 Position.prototype.mouseInit = function() {
-	var _this = this;
 	$('.user-circle')
-		.mousedown(function() {
-			_this.mouseMode = 'Move';
-		});
-	$('body').mousemove(function(event) {
+		.mousedown((function() {
+			this.mouseMode = 'Move';
+		}).bind(this));
+	$('body').mousemove((function(event) {
 		event.preventDefault();
-		if (_this.mouseMode == 'Move') {
-			_this.top = event.pageY - 30;
-			if (_this.top < 0) _this.top = 0;
-			if (_this.top > _this.fieldHeight - 44) _this.top = _this.fieldHeight - 44; 
-			_this.left = event.pageX - 30;
-			if (_this.left < 0) _this.left = 0;
-			if (_this.left > _this.fieldWidth) _this.left = _this.fieldWidth;
-			$('.user-circle').css('top', _this.top)
-				.css('left', _this.left);
-			$('.name').css('top', _this.top)
-				.css('left', 45 + _this.left);
-			socket.emit('init', _this);
+		if (this.mouseMode == 'Move') {
+			this.top = event.pageY - 30;
+			if (this.top < 0) this.top = 0;
+			if (this.top > this.fieldHeight - 44) this.top = this.fieldHeight - 44; 
+			this.left = event.pageX - 30;
+			if (this.left < 0) this.left = 0;
+			if (this.left > this.fieldWidth) this.left = this.fieldWidth;
+			$('.user-circle').css('top', this.top)
+				.css('left', this.left);
+			$('.name').css('top', this.top)
+				.css('left', 45 + this.left);
+			socket.emit('init', this);
 		};
-	}).mouseup(function() {
-		_this.mouseMode = 'Stop';
-	});
+	}).bind(this)).mouseup((function() {
+		this.mouseMode = 'Stop';
+	}).bind(this));
 }
 
 Position.prototype.ArrowUp = function() {
